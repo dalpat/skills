@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills — Does the approach actually work?</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c2330; --line:#2a3340;
+    --ink:#e6edf3; --dim:#9aa7b4; --faint:#6b7785;
+    --good:#3fb950; --bad:#f85149; --warn:#d29922; --accent:#6ea8fe; --magic:#bc8cff;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px}
+  header{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+  h1{font-size:38px;line-height:1.15;margin:0 0 18px;font-weight:700;letter-spacing:-.02em}
+  h1 .hl{color:var(--magic)}
+  .lede{font-size:19px;color:var(--dim);max-width:760px;margin:0}
+  .verdict{margin-top:26px;padding:16px 18px;background:linear-gradient(90deg,rgba(188,140,255,.10),rgba(110,168,254,.06));border:1px solid var(--line);border-left:3px solid var(--magic);border-radius:8px;font-size:16px}
+  .verdict b{color:var(--ink)}
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:13px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:0 0 6px}
+  h3{font-size:26px;margin:.1em 0 16px;letter-spacing:-.01em}
+  p{margin:0 0 16px;color:#cdd6e0}
+  .muted{color:var(--dim)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}h1{font-size:30px}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px}
+  .card h4{margin:0 0 10px;font-size:17px;display:flex;align-items:center;gap:8px}
+  .tag{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+  .t-magic{background:rgba(188,140,255,.14);color:var(--magic);border:1px solid rgba(188,140,255,.3)}
+  .t-proc{background:rgba(210,153,34,.13);color:var(--warn);border:1px solid rgba(210,153,34,.3)}
+  .t-good{background:rgba(63,185,80,.14);color:var(--good)}
+  .t-bad{background:rgba(248,81,73,.14);color:var(--bad)}
+  .quote{font-family:var(--mono);font-size:12.5px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:13px 14px;color:#c7d0db;white-space:pre-wrap;line-height:1.5;margin:10px 0}
+  .quote .lab{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .ok{color:var(--good)} .no{color:var(--bad)} .wn{color:var(--warn)}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  tbody tr:hover{background:rgba(255,255,255,.02)}
+  .pill{font-family:var(--mono);font-size:12px;font-weight:700;padding:2px 9px;border-radius:6px}
+  .p-y{background:rgba(63,185,80,.15);color:var(--good)}
+  .p-n{background:rgba(248,81,73,.15);color:var(--bad)}
+  .p-h{background:rgba(210,153,34,.15);color:var(--warn)}
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:18px 0}
+  @media(max-width:760px){.ba{grid-template-columns:1fr}}
+  .ba>div{padding:20px}
+  .ba .is{background:var(--panel)}
+  .ba .should{background:#13201a;border-left:1px solid var(--line)}
+  .ba h4{margin:0 0 4px;font-size:13px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  .ba .is h4{color:var(--bad)} .ba .should h4{color:var(--good)}
+  ul.clean{margin:8px 0 0;padding-left:20px}ul.clean li{margin:6px 0;color:#cdd6e0}
+  .squeeze{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line)}
+  .squeeze:last-child{border-bottom:none}
+  .squeeze .ic{font-size:22px;flex-shrink:0;width:30px;text-align:center}
+  .num{font-family:var(--mono);color:var(--accent);font-weight:700}
+  .step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border:none}
+  .step .n{font-family:var(--mono);font-weight:700;color:var(--magic);font-size:18px;flex-shrink:0;width:28px}
+  footer{padding:40px 0 70px;color:var(--faint);font-size:13px;font-family:var(--mono)}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:6px 0 0;font-size:13.5px;color:var(--dim)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  code{font-family:var(--mono);font-size:.9em;background:var(--panel2);padding:1px 6px;border-radius:5px;color:#d7c4ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Skills · Approach review</div>
+  <h1>Is "activation, not&nbsp;education" <span class="hl">actually a good bet?</span></h1>
+  <p class="lede">The project bets that LLMs already know the classics — and just need a tiny keyword to <em>activate</em> the right behavior at the right moment. I tested that bet in a controlled experiment. Here's what holds, what breaks, and what the catalog should become.</p>
+  <div class="verdict">
+    <b>Verdict:</b> The thesis is <b>conditionally true.</b> It works beautifully when the keyword names a concept the model <em>genuinely learned as a unit</em> (an <span style="color:var(--magic)">Incantation</span>). It fails when the "skill" is really a workflow the author <em>invented</em> (a <span style="color:var(--warn)">Procedure</span>). The repo ships both under one format — and that conflation is the core flaw.
+  </div>
+</header>
+
+<!-- THE CLAIM -->
+<section>
+  <h2>The bet</h2>
+  <h3>What the project claims</h3>
+  <p>From the README: <em>"Modern LLMs are trained on the classics. They already know these concepts. What they need is <b>activation</b> — a precise keyword hook that triggers the right behavior at the right moment."</em></p>
+  <p>So each skill is a tiny incantation — <code>KEYWORDS</code> · <code>WHEN</code> · <code>DO</code> · <code>STOP</code>, under 150 words. The claim is that the keyword does the heavy lifting; the body is just a nudge. That's a falsifiable claim. So I falsified it.</p>
+</section>
+
+<!-- EXPERIMENT -->
+<section>
+  <h2>The experiment</h2>
+  <h3>Same trigger, three conditions, two skills</h3>
+  <p class="muted">Run headlessly in <code>opencode</code> (claude-haiku-4.5). Two skills chosen to pull in opposite directions: <code>detect-xy</code> (keyword = a real concept) and <code>orient-first</code> (keyword = an invented format). Each under three conditions — bare model, keyword-line only, and the full skill — scored against what the skill is <em>supposed</em> to produce.</p>
+  <table>
+    <thead><tr><th>Skill</th><th>Condition</th><th>Did the floor behavior happen?</th><th>Did the skill's <em>specific</em> output happen?</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3"><span class="tag t-magic">🪄 detect-xy</span></td><td>Bare model</td><td><span class="pill p-y">yes</span> helpful answer + edge-case warning</td><td><span class="pill p-n">no</span> never reframed X vs Y · 0/2</td></tr>
+      <tr><td>Keyword-only</td><td><span class="pill p-y">yes</span></td><td><span class="pill p-y">yes</span> full reframe · 1/1</td></tr>
+      <tr><td>Full skill</td><td><span class="pill p-y">yes</span></td><td><span class="pill p-y">yes</span> full reframe · 2/2</td></tr>
+      <tr><td rowspan="3"><span class="tag t-proc">🔧 orient-first</span></td><td>Bare model</td><td><span class="pill p-y">yes</span> oriented, asked, wrote no code</td><td><span class="pill p-n">no</span> no 5-item charter · 0/2</td></tr>
+      <tr><td>Keyword-only</td><td><span class="pill p-y">yes</span></td><td><span class="pill p-n">no</span> generic questions, no charter · 0/1</td></tr>
+      <tr><td>Full skill</td><td><span class="pill p-y">yes</span></td><td><span class="pill p-h">half</span> exact charter only 1/2</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="font-size:13.5px">Plus, from the prior session: on a <em>natural</em> prompt (no "use your X skill"), only <code>to-issues</code> auto-invoked. <code>detect-xy</code>, <code>orient-first</code>, <code>write-prd</code> did not fire on their own.</p>
+</section>
+
+<!-- THE TWO CATEGORIES -->
+<section>
+  <h2>The finding</h2>
+  <h3>Two kinds of "skill" hide in here</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4><span class="tag t-magic">🪄 Incantation</span></h4>
+      <p style="margin-bottom:8px">The keyword names a <b>canonical concept the model learned as a unit</b> — "XY Problem", "Tracer Bullet", "Fail Fast", "Five Whys". Saying the word activates a rich, pre-trained behavior.</p>
+      <p class="muted" style="font-size:14px;margin:0">The micro-format is <span class="ok">perfect</span> here. The body is almost redundant — the bare keyword line already triggered a flawless reframe.</p>
+    </div>
+    <div class="card">
+      <h4><span class="tag t-proc">🔧 Procedure</span></h4>
+      <p style="margin-bottom:8px">The "keyword" is a <b>name the author invented</b> — "Session Charter", "Bounding Box", a 5-item output format, an interview sequence. The model never learned it as a unit, so no word "activates" it.</p>
+      <p class="muted" style="font-size:14px;margin:0">The micro-format <span class="no">backfires</span> here. Terse = under-specified = inconsistent. It must be spelled out — that's education, not activation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EVIDENCE: detect-xy -->
+<section>
+  <h2>Evidence · the Incantation works</h2>
+  <h3>🪄 detect-xy — the keyword does real work</h3>
+  <p>Prompt (a classic XY trap): <em>"In Python, how do I grab the last 3 characters of a filename to check if it's an image?"</em></p>
+  <div class="grid2">
+    <div>
+      <div class="quote"><span class="lab"><span class="no">Bare model — stays inside the question</span></span>You can grab the last 3 characters using string slicing:
+  <span class="muted">filename[-3:]</span>
+
+However, a more robust approach is pathlib…
+• Works with .jpeg
+• Handles archive.tar.gz</div>
+      <p class="muted" style="font-size:13.5px">It even warns about edge cases — but it <b>answers Y</b>. It never asks whether checking the extension is the right idea at all.</p>
+    </div>
+    <div>
+      <div class="quote"><span class="lab"><span class="ok">Skill (even keyword-only) — steps outside it</span></span><b>X (actual problem):</b> determine if a file is an image.
+<b>Y (attempted solution):</b> grab the last 3 chars.
+
+<b>Question:</b> is that genuinely the right approach?
+• Y is fragile: .jpeg, photo.JPG…
+
+<b>What's your actual goal?</b> Validating uploads,
+filtering a directory, something else?</div>
+      <p class="muted" style="font-size:13.5px">This behavior is <b>not latent</b> — the bare model never did it. The word <em>"XY Problem"</em> alone summoned it. <span class="ok">Thesis confirmed.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- EVIDENCE: orient-first -->
+<section>
+  <h2>Evidence · the Procedure doesn't</h2>
+  <h3>🔧 orient-first — the keyword summons nothing</h3>
+  <p>Prompt: <em>"Hey, let's start working on my project. Can you add a feature for me?"</em></p>
+  <div class="grid2">
+    <div>
+      <div class="quote"><span class="lab">Bare model — already does the floor</span>Before I dive in, let me orient myself.
+Could you tell me:
+1. What feature are you adding?
+2. Where in the codebase?
+3. Current state of the project?
+4. Any constraints?</div>
+      <p class="muted" style="font-size:13.5px">The <b>floor behavior is latent</b> — the model orients and asks before coding every time, with <em>no skill at all</em>.</p>
+    </div>
+    <div>
+      <div class="quote"><span class="lab"><span class="wn">Full skill — only 1 of 2 runs</span></span><b>Workflow mode:</b> Feature development
+<b>What I KNOW:</b> · you want a feature · repo at /app
+<b>What I DON'T KNOW:</b> · which feature? · users?
+<b>Bounded goal:</b> …
+<b>Out of scope:</b> · anything beyond this feature</div>
+      <p class="muted" style="font-size:13.5px">The specific 5-item charter is an <b>invented format</b>. Keyword-only never produced it; even the full skill landed it just half the time. <span class="no">Activation can't summon a format that isn't in the weights.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- THE SQUEEZES -->
+<section>
+  <h2>Two limits that cap the whole idea</h2>
+  <h3>Even a good skill is squeezed from both sides</h3>
+  <div class="squeeze">
+    <div class="ic">🎯</div>
+    <div><b>The reliability squeeze.</b> A skill only helps if it <em>fires</em> — and on natural prompts, most don't. <code>detect-xy</code> answered the trap directly until explicitly told "use your detect-xy skill." Value is gated behind activation that mostly doesn't happen, unless the user's words echo the <code>description</code> or you hard-wire it with a hook.</div>
+  </div>
+  <div class="squeeze">
+    <div class="ic">⚖️</div>
+    <div><b>The model-size squeeze.</b> On a <em>weak</em> model the skill is needed more but followed less reliably (the charter landed 50% of the time). On a <em>strong</em> model the latent concepts are richer — but the model self-detects more and needs the skill less. The window where a skill is both <em>needed</em> and <em>reliably obeyed</em> is narrow.</div>
+  </div>
+</section>
+
+<!-- WHAT IT IS vs WHAT IT SHOULD BE -->
+<section>
+  <h2>What it is → what it should be</h2>
+  <h3>Reclassify the catalog</h3>
+  <div class="ba">
+    <div class="is">
+      <h4>✗ What it is now</h4>
+      <ul class="clean">
+        <li>One format (the Incantation) applied to <b>everything</b>.</li>
+        <li>Procedures like <code>orient-first</code>, <code>write-prd</code>, <code>to-issues</code> are crushed into 6 terse bullets — too thin to execute consistently.</li>
+        <li>The <code>Keywords:</code> line treated as magic even when the words are invented (<em>"Session Charter"</em>) and do nothing.</li>
+        <li>"Circuit breaker / works even if the agent degrades" — but skills need a healthy agent to fire at all.</li>
+      </ul>
+    </div>
+    <div class="should">
+      <h4>✓ What it should be</h4>
+      <ul class="clean">
+        <li>Two explicit classes, tagged: <span class="tag t-magic">🪄 Incantation</span> and <span class="tag t-proc">🔧 Procedure</span>.</li>
+        <li><b>Incantations</b> stay micro — trust the keyword, keep them lean.</li>
+        <li><b>Procedures</b> get room: a real template, an example, the exact steps — <em>or</em> become a deterministic hook/script, not a vibe.</li>
+        <li>Every must-run skill is <b>paired with a <code>SessionStart</code> hook</b> so it doesn't depend on activation.</li>
+        <li>Every skill earns its place via an <b>eval</b>: does it beat the bare model on its trigger?</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top:30px">The four shipping skills, reclassified</h3>
+  <table>
+    <thead><tr><th>Skill</th><th>Class</th><th>Why</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td><code>detect-xy</code></td><td><span class="tag t-magic">🪄 Incantation</span></td><td>"XY Problem" is canonical; behavior is not latent → high leverage</td><td>Keep micro. This is the model citizen.</td></tr>
+      <tr><td><code>orient-first</code></td><td><span class="tag t-proc">🔧 Procedure</span></td><td>Floor is latent; the 5-item charter is an invented format</td><td>Enforce via hook (done ✓). Spell out the format.</td></tr>
+      <tr><td><code>write-prd</code></td><td><span class="tag t-proc">🔧 Procedure</span></td><td>Multi-step interview + GitHub issue; no canonical trigger</td><td>Give it a template + example, or defer to a workflow skill.</td></tr>
+      <tr><td><code>to-issues</code></td><td><span class="tag t-proc">🔧 Procedure</span></td><td>Invented slice template — but the structure is what made it fire & succeed</td><td>Keep the explicit structure; it's a <em>good</em> procedure. Don't trim it.</td></tr>
+    </tbody>
+  </table>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--magic)"></span> Incantation — trust the keyword, stay tiny</span>
+    <span><span class="dot" style="background:var(--warn)"></span> Procedure — spell it out or make it deterministic</span>
+  </div>
+</section>
+
+<!-- THE FIX -->
+<section>
+  <h2>What to do next</h2>
+  <h3>Four concrete moves</h3>
+  <div class="step"><div class="n">1</div><div><b>Split the catalog.</b> Tag every skill 🪄 or 🔧. The README's single format is hiding two different problems.</div></div>
+  <div class="step"><div class="n">2</div><div><b>Apply the litmus test</b> to each skill: <em>"Is the keyword a concept the model learned, or a name I made up?"</em> Made-up → it's a Procedure; stop pretending a keyword activates it.</div></div>
+  <div class="step"><div class="n">3</div><div><b>Pair must-run skills with hooks.</b> The <code>orient-first</code> <code>SessionStart</code> hook is the template. Procedures especially should be enforced, not hoped for.</div></div>
+  <div class="step"><div class="n">4</div><div><b>Add an eval harness.</b> This 10-run experiment is the seed: baseline-vs-skill scoring is how a skill proves it earns its context — and how you'd have caught orient-first landing only 50%.</div></div>
+</section>
+
+<section style="border:none">
+  <h2>One-line takeaway</h2>
+  <h3 style="max-width:820px">It's not a bad project — it's <span style="color:var(--magic)">two projects wearing one format.</span> Separate the Incantations from the Procedures, and the good half gets sharper while the weak half gets honest.</h3>
+</section>
+
+<footer>
+  Generated from a controlled opencode experiment · 10 runs · claude-haiku-4.5 · detect-xy &amp; orient-first across bare / keyword-only / full conditions.
+</footer>
+
+</div>
+</body>
+</html>
