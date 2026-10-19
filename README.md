@@ -33,9 +33,9 @@ Do not add `Type`, `Keywords`, or `When` sections to the body. Skill types remai
 
 ## Two kinds of skill: 🪄 Incantation vs 🔧 Procedure
 
-A controlled experiment (see [`docs/approach.html`](./docs/approach.html)) showed the "activation, not education" thesis is **conditionally true**, and the condition is sharp:
+An early experiment (see the [historical approach review](./docs/approach.html)) explored the distinction between invoking an established concept and specifying a workflow. That review covers earlier versions, including skills since removed from the catalog.
 
-- **🪄 Incantation** — the keyword names a concept the model *genuinely learned as a unit* ("XY Problem", "Tracer Bullet", "Fail Fast"). Saying the word activates a rich latent behavior. The micro-format is perfect here — the body is almost redundant. `detect-xy` proved this: even a bare keyword line triggered a flawless reframe the base model never produced on its own.
+- **🪄 Incantation** — a short instruction invokes an established concept, such as "XY Problem", "Tracer Bullet", or "Fail Fast". Keep it brief when that concept supplies enough guidance for the task.
 - **🔧 Procedure** — the "keyword" is a name *you invented* ("Session Charter", a 5-item output format, an interview sequence). The model never learned it, so no keyword activates it. The micro-format *backfires*: terse = under-specified = inconsistent. Procedures must be spelled out (a real template, an example) — or made deterministic via a hook/script.
 
 **Litmus test for any new skill:** *Is the keyword a concept the model learned, or a name I made up?* If made up, it's a Procedure — don't pretend a keyword activates it.
@@ -48,7 +48,6 @@ Skills are organized by project phase. Status: ✅ Available | 🚧 Planned · T
 | Skill | Status | Type | Trigger |
 |-------|--------|------|---------|
 | `orient-first` | ✅ | 🔧 | Force orientation before any work begins (floor is latent; charter is invented → [enforce via hook](./hooks)) |
-| `detect-xy` | ✅ | 🪄 | "Are you solving Y when the real problem is X?" |
 | `ambiguity-detector` | 🚧 | 🪄 | "Where are you guessing instead of knowing?" |
 
 ### Phase 1: Ideation / Design
@@ -63,8 +62,6 @@ Skills are organized by project phase. Status: ✅ Available | 🚧 Planned · T
 |-------|--------|------|---------|
 | `slice-session` | 🚧 | | Force a single bounded task per session |
 | `tracer-bullet` | 🚧 | 🪄 | "Build the thinnest end-to-end path first" |
-| `write-prd` | ✅ | 🔧 | Create a PRD with user + developer stories (needs template + example) |
-| `to-issues` | ✅ | 🔧 | Break PRD into vertical slices with file tracking (keep the explicit structure) |
 
 ### Phase 3: Implementation
 | Skill | Status | Type | Trigger |
@@ -102,10 +99,7 @@ Install individual skills using the [Skills CLI](https://skills.sh/). Only ✅ A
 
 ```bash
 npx skills add dalpat/skills --skill orient-first
-npx skills add dalpat/skills --skill detect-xy
 npx skills add dalpat/skills --skill grill-me
-npx skills add dalpat/skills --skill write-prd
-npx skills add dalpat/skills --skill to-issues
 npx skills add dalpat/skills --skill project-understanding
 ```
 
@@ -157,7 +151,7 @@ Use frontmatter `name` and `description` to identify the skill and explain when 
 
 Keep it under 150 words. Don't explain background concepts the model already knows or repeat selection guidance in the body.
 
-**🔧 Procedure** (an invented workflow or output format, e.g. `orient-first`, `to-issues`):
+**🔧 Procedure** (an invented workflow or output format, e.g. `orient-first`, `grill-me`):
 
 Same body structure, plus:
 
